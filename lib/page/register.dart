@@ -15,6 +15,15 @@ Widget inputText(TextEditingController controller, String label) {
   );
 }
 
+Widget logo(double height) {
+  return Container(
+    height: height,
+    alignment: Alignment.center,
+    padding: const EdgeInsets.all(10),
+    child: Image.asset('assets/images/logo.png'),
+  );
+}
+
 class Register extends StatefulWidget {
   const Register({Key? key}) : super(key: key);
 
@@ -34,12 +43,7 @@ class _RegisterState extends State<Register> {
         padding: const EdgeInsets.all(10),
         child: ListView(
           children: <Widget>[
-            Container(
-              height: 150,
-              alignment: Alignment.center,
-              padding: const EdgeInsets.all(10),
-              child: Image.asset('assets/images/logo.png'),
-            ),
+            logo(150),
             Container(
               alignment: Alignment.center,
               padding: const EdgeInsets.all(10),
@@ -56,7 +60,8 @@ class _RegisterState extends State<Register> {
                 height: 50,
                 padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                 child: ElevatedButton(
-                  child: const Text('Register'),
+                  child: const Text('Register',
+                      style: TextStyle(color: Colors.white)),
                   onPressed: () {
                     print(emailController.text);
                     print(passwordController.text);
