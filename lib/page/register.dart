@@ -60,8 +60,7 @@ class _RegisterState extends State<Register> {
                 height: 50,
                 padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                 child: ElevatedButton(
-                  child: const Text('Register',
-                      style: TextStyle(color: Colors.white)),
+                  child: const Text('Register'),
                   onPressed: () {
                     print(emailController.text);
                     print(passwordController.text);
