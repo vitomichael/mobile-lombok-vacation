@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tubes/page/home/home.dart';
+import 'package:tubes/page/property/add_property.dart';
+import 'package:tubes/page/user/register.dart';
 
 class Property extends StatelessWidget {
   const Property({Key? key}) : super(key: key);
@@ -50,7 +52,13 @@ class Property extends StatelessWidget {
                             ),
                           ],
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const AddProperty()),
+                          );
+                        },
                       ),
                     ),
                   ],
