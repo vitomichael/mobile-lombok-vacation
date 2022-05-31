@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tubes/page/login.dart';
+import 'package:tubes/page/user/login.dart';
 
 Widget inputText(TextEditingController controller, String label) {
   return Container(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tubes/page/login.dart';
-import 'package:tubes/page/register.dart';
+import 'package:tubes/page/user/login.dart';
+import 'package:tubes/page/user/register.dart';
 
 class LandingPage extends StatelessWidget {
   const LandingPage({Key? key}) : super(key: key);

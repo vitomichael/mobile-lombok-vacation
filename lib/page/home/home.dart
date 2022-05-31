@@ -2,6 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:tubes/page/home/dashboard.dart';
 import 'package:tubes/page/home/profile.dart';
 import 'package:tubes/page/home/property.dart';
+import 'package:tubes/page/user/register.dart';
+
+Widget TopBar() {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: [
+      logo(80),
+      Row(
+        children: [
+          Text("Nama"),
+          Container(
+              margin: const EdgeInsets.only(right: 10),
+              child: Icon(Icons.arrow_drop_down)),
+        ],
+      ),
+    ],
+  );
+}
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);

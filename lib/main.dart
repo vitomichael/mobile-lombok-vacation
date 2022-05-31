@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tubes/page/home/home.dart';
-import 'package:tubes/page/landingPage.dart';
+import 'package:tubes/page/home/property.dart';
+import 'package:tubes/page/user/landingPage.dart';
 
 void main() {
   runApp(const MyApp());
