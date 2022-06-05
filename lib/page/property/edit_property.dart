@@ -3,14 +3,14 @@ import 'package:tubes/page/home/home.dart';
 import 'package:tubes/page/home/property.dart';
 import 'package:tubes/page/user/register.dart';
 
-class AddProperty extends StatefulWidget {
-  const AddProperty({Key? key}) : super(key: key);
+class EditProperty extends StatefulWidget {
+  const EditProperty({Key? key}) : super(key: key);
 
   @override
-  State<AddProperty> createState() => _AddPropertyState();
+  State<EditProperty> createState() => _EditPropertyState();
 }
 
-class _AddPropertyState extends State<AddProperty> {
+class _EditPropertyState extends State<EditProperty> {
   @override
   Widget build(BuildContext context) {
     TextEditingController nameController = TextEditingController();
@@ -142,7 +142,7 @@ class _AddPropertyState extends State<AddProperty> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const AddProperty()),
+                        builder: (context) => const EditProperty()),
                   );
                 },
               ),

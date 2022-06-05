@@ -1,26 +1,36 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:tubes/page/home/home.dart';
 import 'package:tubes/page/user/register.dart';
 
 import 'package:tubes/models/user_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'dart:async';
 
-Future<UserModel> login() async {
+Future<UserModel> login(String email, String password) async {
   try {
     Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
     };
     var url = Uri.parse('http://localhost:8000/api/login');
     var response = await http.post(url,
-        body: jsonEncode(
-            <String, String>{'email': 'admin@gmail.com', 'password': 'admin'}),
+        body:
+            jsonEncode(<String, String>{'email': email, 'password': password}),
         headers: requestHeaders);
 
     if (response.statusCode == 200) {
-      return UserModel.fromJson(jsonDecode(response.body));
+      var body = UserModel.fromJson(jsonDecode(response.body));
+
+      final token = body.token;
+
+      final prefs = await SharedPreferences.getInstance();
+
+      await prefs.setString('token', 'Bearer $token');
+
+      return body;
     } else {
       throw Exception("Email / password salah");
     }
@@ -68,7 +78,12 @@ class _LoginState extends State<Login> {
                   ),
                   onPressed: () async {
                     try {
-                      UserModel log = await login();
+                      UserModel log = await login(
+                          emailController.text, passwordController.text);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const Home()),
+                      );
                     } catch (e) {
                       print(e);
                     }
