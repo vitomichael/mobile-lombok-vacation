@@ -3,6 +3,7 @@ import 'package:tubes/models/property_model.dart';
 import 'package:tubes/page/home/home.dart';
 import 'package:tubes/page/property/add_property.dart';
 import 'package:tubes/page/property/edit_property.dart';
+import 'package:tubes/page/property/property_detail.dart';
 import 'package:tubes/page/user/register.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -104,7 +105,15 @@ class _PropertyState extends State<Property> {
   Widget listProperty() {
     Widget _gestureCard(snapshot, position) {
       return GestureDetector(
-        onTap: () {},
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  PropertyDetail(property: snapshot.data![position]),
+            ),
+          );
+        },
         child: Container(
           margin: const EdgeInsets.all(5),
           child: Card(
@@ -130,7 +139,7 @@ class _PropertyState extends State<Property> {
                       )
                     ],
                   ),
-                  Row(
+                  Column(
                     children: [
                       ElevatedButton(
                         onPressed: () {
@@ -142,7 +151,7 @@ class _PropertyState extends State<Property> {
                         },
                         child: Icon(Icons.edit_note_outlined),
                       ),
-                      const SizedBox(width: 5),
+                      const SizedBox(height: 5),
                       ElevatedButton(
                         onPressed: () {
                           deleteProperty(snapshot.data![position].id);

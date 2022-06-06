@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Lombok Vacation',
       theme: ThemeData(primarySwatch: Colors.orange),
-      home: const LandingPage(),
+      home: const Property(),
     );
   }
 }

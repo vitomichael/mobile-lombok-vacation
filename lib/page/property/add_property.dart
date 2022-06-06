@@ -3,6 +3,22 @@ import 'package:tubes/page/home/home.dart';
 import 'package:tubes/page/home/property.dart';
 import 'package:tubes/page/user/register.dart';
 
+Widget TopBarWithBackButton(context) {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: [
+      IconButton(
+        icon: Icon(Icons.arrow_back),
+        highlightColor: Colors.pink,
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+      ),
+      logo(80),
+    ],
+  );
+}
+
 class AddProperty extends StatefulWidget {
   const AddProperty({Key? key}) : super(key: key);
 
@@ -29,19 +45,7 @@ class _AddPropertyState extends State<AddProperty> {
         ),
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                  icon: Icon(Icons.arrow_back),
-                  highlightColor: Colors.pink,
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-                logo(80),
-              ],
-            ),
+            TopBarWithBackButton(context),
             Container(
               alignment: Alignment.topLeft,
               margin: const EdgeInsets.fromLTRB(40, 0, 0, 40),
