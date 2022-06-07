@@ -27,13 +27,13 @@ class AddProperty extends StatefulWidget {
 }
 
 class _AddPropertyState extends State<AddProperty> {
+  TextEditingController nameController = TextEditingController();
+  TextEditingController areaController = TextEditingController();
+  TextEditingController typeController = TextEditingController();
+  String area = 'Lombok Barat';
+  String type = 'Villa';
   @override
   Widget build(BuildContext context) {
-    TextEditingController nameController = TextEditingController();
-    TextEditingController areaController = TextEditingController();
-    TextEditingController typeController = TextEditingController();
-    String area = 'Lombok Barat';
-    String type = 'Villa';
     return Scaffold(
         body: SingleChildScrollView(
       child: Container(
