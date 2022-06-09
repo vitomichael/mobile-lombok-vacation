@@ -1,7 +1,41 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:tubes/page/home/home.dart';
 import 'package:tubes/page/home/property.dart';
 import 'package:tubes/page/user/register.dart';
+
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tubes/models/property_model.dart';
+import 'package:http/http.dart' as http;
+import 'dart:async';
+
+Future<PropertyModel> login(String name, String area, String type) async {
+  try {
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+    };
+    var url = Uri.parse('http://localhost:8000/api/property');
+    var response = await http.post(url,
+        body: jsonEncode(<String, String>{'area': area, 'type': type}),
+        headers: requestHeaders);
+
+    if (response.statusCode == 200) {
+      var body = PropertyModel.fromJson(jsonDecode(response.body));
+
+      final prefs = await SharedPreferences.getInstance();
+
+      await prefs.setString('name', body.name);
+      await prefs.setString('area', body.area);
+      await prefs.setString('type', body.type);
+
+      return body;
+    } else {
+      throw Exception("Gagal Menambahkan Property");
+    }
+  } catch (e) {
+    rethrow;
+  }
+}
 
 Widget TopBarWithBackButton(context) {
   return Row(
@@ -27,13 +61,13 @@ class AddProperty extends StatefulWidget {
 }
 
 class _AddPropertyState extends State<AddProperty> {
+  TextEditingController nameController = TextEditingController();
+  TextEditingController areaController = TextEditingController();
+  TextEditingController typeController = TextEditingController();
+  String area = 'Lombok Barat';
+  String type = 'Villa';
   @override
   Widget build(BuildContext context) {
-    TextEditingController nameController = TextEditingController();
-    TextEditingController areaController = TextEditingController();
-    TextEditingController typeController = TextEditingController();
-    String area = 'Lombok Barat';
-    String type = 'Villa';
     return Scaffold(
         body: SingleChildScrollView(
       child: Container(
@@ -142,12 +176,18 @@ class _AddPropertyState extends State<AddProperty> {
                     ),
                   ],
                 ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const AddProperty()),
-                  );
+                onPressed: () async {
+                  try {
+                    PropertyModel log = await login(nameController.text,
+                        areaController.text, typeController.text);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const AddProperty()),
+                    );
+                  } catch (e) {
+                    print(e);
+                  }
                 },
               ),
             )
