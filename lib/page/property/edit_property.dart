@@ -1,23 +1,64 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tubes/models/property_model.dart';
 import 'package:tubes/page/home/home.dart';
 import 'package:tubes/page/home/property.dart';
 import 'package:tubes/page/user/register.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+Future<PropertyModel> edit(
+    int id, String name, String area, String type) async {
+  try {
+    final prefs = await SharedPreferences.getInstance();
+
+    final String? token = prefs.getString('token');
+    final int? userId = prefs.getInt('userId');
+
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': token ?? ''
+    };
+    var url = Uri.parse('http://localhost:8000/api/property/$id');
+    var response = await http.put(url,
+        body: jsonEncode(<String, dynamic>{
+          'userId': userId,
+          'area': area,
+          'type': type,
+          'name': name
+        }),
+        headers: requestHeaders);
+
+    if (response.statusCode == 200) {
+      print(response.statusCode);
+      var body = PropertyModel.fromJson(jsonDecode(response.body));
+      print(body);
+
+      return body;
+    } else {
+      throw Exception(response.statusCode);
+    }
+  } catch (e) {
+    rethrow;
+  }
+}
 
 class EditProperty extends StatefulWidget {
-  const EditProperty({Key? key}) : super(key: key);
+  const EditProperty({Key? key, required this.property}) : super(key: key);
+  final PropertyModel property;
 
   @override
   State<EditProperty> createState() => _EditPropertyState();
 }
 
 class _EditPropertyState extends State<EditProperty> {
+  String area = 'Lombok Barat';
+  String type = 'Villa';
   @override
   Widget build(BuildContext context) {
     TextEditingController nameController = TextEditingController();
-    TextEditingController areaController = TextEditingController();
-    TextEditingController typeController = TextEditingController();
-    String area = 'Lombok Barat';
-    String type = 'Villa';
+    nameController.text = widget.property.name;
     return Scaffold(
         body: SingleChildScrollView(
       child: Container(
@@ -51,12 +92,18 @@ class _EditPropertyState extends State<EditProperty> {
                   const Text("Lombok Vacation",
                       style: TextStyle(color: Colors.grey, fontSize: 14)),
                   const SizedBox(height: 10),
-                  const Text("Tambah Property",
+                  const Text("Edit Property",
                       style: TextStyle(color: Colors.black87, fontSize: 36)),
                 ],
               ),
             ),
-            inputText(nameController, "Nama Property"),
+            TextFormField(
+              autofocus: false,
+              controller: nameController,
+              decoration: InputDecoration(
+                hintText: 'Property Name',
+              ),
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -108,7 +155,7 @@ class _EditPropertyState extends State<EditProperty> {
                   items: <String>[
                     'Villa',
                     'Hotel',
-                    'Guest House',
+                    'Guest_House',
                     'Cottage',
                   ].map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
@@ -133,17 +180,22 @@ class _EditPropertyState extends State<EditProperty> {
                     ),
                     const SizedBox(width: 7),
                     const Text(
-                      'Tambah Property',
+                      'Edit Property',
                       style: TextStyle(color: Colors.white),
                     ),
                   ],
                 ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const EditProperty()),
-                  );
+                onPressed: () async {
+                  try {
+                    PropertyModel log = await edit(
+                        widget.property.id, nameController.text, area, type);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const Home()),
+                    );
+                  } catch (e) {
+                    print(e);
+                  }
                 },
               ),
             )

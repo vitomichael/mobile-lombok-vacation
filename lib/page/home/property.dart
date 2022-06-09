@@ -9,7 +9,25 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
-Future<void> deleteProperty(int id) async {}
+Future<void> deleteProperty(int id) async {
+  final prefs = await SharedPreferences.getInstance();
+
+  final String? token = prefs.getString('token');
+
+  Map<String, String> requestHeaders = {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+    'Authorization': token ?? ''
+  };
+  var url = Uri.parse('http://localhost:8000/api/property/$id');
+  final response = await http.delete(url, headers: requestHeaders);
+
+  if (response.statusCode == 200) {
+    print(response.statusCode);
+  } else {
+    throw Exception("Failed");
+  }
+}
 
 Future<List<PropertyModel>> fetchProperty() async {
   try {
@@ -146,15 +164,22 @@ class _PropertyState extends State<Property> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const AddProperty()),
+                              builder: (context) => EditProperty(
+                                  property: snapshot.data![position]),
+                            ),
                           );
                         },
                         child: Icon(Icons.edit_note_outlined),
                       ),
                       const SizedBox(height: 5),
                       ElevatedButton(
-                        onPressed: () {
-                          deleteProperty(snapshot.data![position].id);
+                        onPressed: () async {
+                          await deleteProperty(snapshot.data![position].id);
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(builder: (context) => Home()),
+                            (Route<dynamic> route) => false,
+                          );
                         },
                         child: Icon(Icons.delete_outline_outlined),
                         style: ButtonStyle(

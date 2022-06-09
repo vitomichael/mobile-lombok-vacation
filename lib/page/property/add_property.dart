@@ -9,28 +9,34 @@ import 'package:tubes/models/property_model.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 
-Future<PropertyModel> login(String name, String area, String type) async {
+Future<PropertyModel> add(String name, String area, String type) async {
   try {
+    final prefs = await SharedPreferences.getInstance();
+
+    final String? token = prefs.getString('token');
+    final int? userId = prefs.getInt('userId');
+
     Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': token ?? ''
     };
     var url = Uri.parse('http://localhost:8000/api/property');
     var response = await http.post(url,
-        body: jsonEncode(<String, String>{'area': area, 'type': type}),
+        body: jsonEncode(<String, dynamic>{
+          'userId': userId,
+          'area': area,
+          'type': type,
+          'name': name
+        }),
         headers: requestHeaders);
 
     if (response.statusCode == 200) {
       var body = PropertyModel.fromJson(jsonDecode(response.body));
 
-      final prefs = await SharedPreferences.getInstance();
-
-      await prefs.setString('name', body.name);
-      await prefs.setString('area', body.area);
-      await prefs.setString('type', body.type);
-
       return body;
     } else {
-      throw Exception("Gagal Menambahkan Property");
+      throw Exception(response.statusCode);
     }
   } catch (e) {
     rethrow;
@@ -42,7 +48,7 @@ Widget TopBarWithBackButton(context) {
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
       IconButton(
-        icon: Icon(Icons.arrow_back),
+        icon: const Icon(Icons.arrow_back),
         highlightColor: Colors.pink,
         onPressed: () {
           Navigator.of(context).pop();
@@ -62,8 +68,6 @@ class AddProperty extends StatefulWidget {
 
 class _AddPropertyState extends State<AddProperty> {
   TextEditingController nameController = TextEditingController();
-  TextEditingController areaController = TextEditingController();
-  TextEditingController typeController = TextEditingController();
   String area = 'Lombok Barat';
   String type = 'Villa';
   @override
@@ -146,7 +150,7 @@ class _AddPropertyState extends State<AddProperty> {
                   items: <String>[
                     'Villa',
                     'Hotel',
-                    'Guest House',
+                    'Guest_House',
                     'Cottage',
                   ].map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
@@ -178,12 +182,11 @@ class _AddPropertyState extends State<AddProperty> {
                 ),
                 onPressed: () async {
                   try {
-                    PropertyModel log = await login(nameController.text,
-                        areaController.text, typeController.text);
+                    PropertyModel log =
+                        await add(nameController.text, area, type);
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => const AddProperty()),
+                      MaterialPageRoute(builder: (context) => const Home()),
                     );
                   } catch (e) {
                     print(e);

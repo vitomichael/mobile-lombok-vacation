@@ -29,6 +29,7 @@ Future<UserModel> login(String email, String password) async {
       final prefs = await SharedPreferences.getInstance();
 
       await prefs.setString('token', 'Bearer $token');
+      await prefs.setInt('userId', body.id);
       await prefs.setString('name', body.name);
       await prefs.setString('email', body.email);
       await prefs.setString('phone', body.phone);
