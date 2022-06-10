@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tubes/models/user_model.dart';
+import 'package:tubes/page/home/home.dart';
 import 'package:tubes/page/property/add_property.dart';
 import 'package:tubes/page/user/landingPage.dart';
 import 'package:tubes/page/user/register.dart';
@@ -67,7 +68,7 @@ class _ProfileState extends State<Profile> {
           ),
           child: Column(
             children: [
-              TopBarWithBackButton(context),
+              TopBar(),
               Container(
                 alignment: Alignment.topLeft,
                 margin: const EdgeInsets.fromLTRB(40, 0, 0, 40),
