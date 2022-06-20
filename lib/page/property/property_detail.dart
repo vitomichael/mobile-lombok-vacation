@@ -10,6 +10,7 @@ import 'package:tubes/page/property/add_property.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tubes/page/property/add_unit.dart';
+import 'package:tubes/page/property/edit_unit.dart';
 
 Future<void> deleteUnit(int id) async {
   final prefs = await SharedPreferences.getInstance();
@@ -67,17 +68,15 @@ class PropertyDetail extends StatefulWidget {
   final PropertyModel property;
 
   @override
-  State<PropertyDetail> createState() => _PropertyDetailState(property);
+  State<PropertyDetail> createState() => _PropertyDetailState();
 }
 
 class _PropertyDetailState extends State<PropertyDetail> {
   late Future<List<UnitModel>> futureUnit;
-  PropertyModel property;
-  _PropertyDetailState(this.property);
   @override
   void initState() {
     super.initState();
-    futureUnit = (fetchUnits(property.id));
+    futureUnit = (fetchUnits(widget.property.id));
   }
 
   Widget listUnit() {
@@ -130,10 +129,11 @@ class _PropertyDetailState extends State<PropertyDetail> {
                       ElevatedButton(
                         onPressed: () {
                           Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const AddProperty()),
-                          );
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    EditUnit(unit: snapshot.data![position]),
+                              ));
                         },
                         child: Icon(Icons.edit_note_outlined),
                       ),
