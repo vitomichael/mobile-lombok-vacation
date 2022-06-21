@@ -74,7 +74,7 @@ class _EditPropertyState extends State<EditProperty> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 IconButton(
-                  icon: Icon(Icons.arrow_back),
+                  icon: const Icon(Icons.arrow_back),
                   highlightColor: Colors.pink,
                   onPressed: () {
                     Navigator.of(context).pop();
@@ -88,20 +88,24 @@ class _EditPropertyState extends State<EditProperty> {
               margin: const EdgeInsets.fromLTRB(40, 0, 0, 40),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text("Lombok Vacation",
+                children: const [
+                  Text("Lombok Vacation",
                       style: TextStyle(color: Colors.grey, fontSize: 14)),
-                  const SizedBox(height: 10),
-                  const Text("Edit Property",
+                  SizedBox(height: 10),
+                  Text("Edit Property",
                       style: TextStyle(color: Colors.black87, fontSize: 36)),
                 ],
               ),
             ),
-            TextFormField(
-              autofocus: false,
-              controller: nameController,
-              decoration: InputDecoration(
-                hintText: 'Property Name',
+            Container(
+              margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+              child: TextFormField(
+                autofocus: false,
+                controller: nameController,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Property Name',
+                ),
               ),
             ),
             Row(
@@ -172,14 +176,14 @@ class _EditPropertyState extends State<EditProperty> {
               child: ElevatedButton(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(
+                  children: const [
+                    Icon(
                       Icons.add,
                       color: Colors.white,
                       size: 16,
                     ),
-                    const SizedBox(width: 7),
-                    const Text(
+                    SizedBox(width: 7),
+                    Text(
                       'Edit Property',
                       style: TextStyle(color: Colors.white),
                     ),

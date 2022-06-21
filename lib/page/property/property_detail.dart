@@ -9,7 +9,8 @@ import 'package:tubes/page/home/home.dart';
 import 'package:tubes/page/property/add_property.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tubes/page/property/add_unit.dart';
+import 'package:tubes/page/unit/add_unit.dart';
+import 'package:tubes/page/unit/edit_unit.dart';
 
 Future<void> deleteUnit(int id) async {
   final prefs = await SharedPreferences.getInstance();
@@ -132,7 +133,8 @@ class _PropertyDetailState extends State<PropertyDetail> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const AddProperty()),
+                                builder: (context) =>
+                                    EditUnit(unit: snapshot.data![position])),
                           );
                         },
                         child: Icon(Icons.edit_note_outlined),
@@ -213,7 +215,8 @@ class _PropertyDetailState extends State<PropertyDetail> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const AddUnit()),
+                  MaterialPageRoute(
+                      builder: (context) => AddUnit(property: property)),
                 );
               },
             ),

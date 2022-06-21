@@ -5,7 +5,7 @@ class UnitModel {
   final String picture;
   final String description;
   final int totalUnit;
-  final int price;
+  final double price;
 
   const UnitModel({
     required this.id,
