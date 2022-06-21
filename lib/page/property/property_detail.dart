@@ -11,6 +11,26 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tubes/page/property/add_unit.dart';
 
+Future<void> deleteUnit(int id) async {
+  final prefs = await SharedPreferences.getInstance();
+
+  final String? token = prefs.getString('token');
+
+  Map<String, String> requestHeaders = {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+    'Authorization': token ?? ''
+  };
+  var url = Uri.parse('http://localhost:8000/api/unit/$id');
+  final response = await http.delete(url, headers: requestHeaders);
+
+  if (response.statusCode == 200) {
+    print(response.statusCode);
+  } else {
+    throw Exception("Failed");
+  }
+}
+
 Future<List<UnitModel>> fetchUnits(int propertyId) async {
   try {
     final prefs = await SharedPreferences.getInstance();
@@ -47,16 +67,17 @@ class PropertyDetail extends StatefulWidget {
   final PropertyModel property;
 
   @override
-  State<PropertyDetail> createState() => _PropertyDetailState();
+  State<PropertyDetail> createState() => _PropertyDetailState(property);
 }
 
 class _PropertyDetailState extends State<PropertyDetail> {
   late Future<List<UnitModel>> futureUnit;
-
+  PropertyModel property;
+  _PropertyDetailState(this.property);
   @override
   void initState() {
     super.initState();
-    futureUnit = (fetchUnits(2));
+    futureUnit = (fetchUnits(property.id));
   }
 
   Widget listUnit() {
@@ -118,7 +139,14 @@ class _PropertyDetailState extends State<PropertyDetail> {
                       ),
                       const SizedBox(height: 5),
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () async {
+                          await deleteUnit(snapshot.data![position].id);
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(builder: (context) => Home()),
+                            (Route<dynamic> route) => false,
+                          );
+                        },
                         child: Icon(Icons.delete_outline_outlined),
                         style: ButtonStyle(
                           backgroundColor:
