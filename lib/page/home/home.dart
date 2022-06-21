@@ -8,16 +8,31 @@ import 'package:tubes/page/home/property.dart';
 import 'package:tubes/page/user/register.dart';
 
 Widget TopBar() {
+  Future<String> _getName() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    final String? name = prefs.getString('name');
+
+    return name!;
+  }
+
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
       logo(80),
       Row(
         children: [
-          Text("Nama"),
+          FutureBuilder(
+              future: _getName(),
+              builder: (context, AsyncSnapshot<String> snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  return Text(snapshot.data!);
+                }
+                return const Text("");
+              }),
           Container(
               margin: const EdgeInsets.only(right: 10),
-              child: Icon(Icons.arrow_drop_down)),
+              child: const Icon(Icons.arrow_drop_down)),
         ],
       ),
     ],
@@ -34,8 +49,6 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   int _selectedIndex = 1;
 
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
     Dashboard(),
     Property(),
