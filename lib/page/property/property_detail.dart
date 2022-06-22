@@ -11,6 +11,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tubes/page/unit/add_unit.dart';
 import 'package:tubes/page/unit/edit_unit.dart';
+import 'package:tubes/page/unit/unit_detail.dart';
 
 Future<void> deleteUnit(int id) async {
   final prefs = await SharedPreferences.getInstance();
@@ -85,7 +86,17 @@ class _PropertyDetailState extends State<PropertyDetail> {
     Widget _gestureCard(snapshot, position) {
       var pictureUrl = snapshot.data![position].picture;
       return GestureDetector(
-        onTap: () {},
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => UnitDetail(
+                unit: snapshot.data![position],
+                property: property,
+              ),
+            ),
+          );
+        },
         child: Container(
           height: 120,
           margin: const EdgeInsets.all(5),

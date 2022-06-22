@@ -1,6 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:tubes/page/user/login.dart';
 
+import 'package:http/http.dart' as http;
+
+import 'dart:async';
+import 'dart:convert';
+
+Future<String> register(
+    String name, String email, String password, String phone) async {
+  try {
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    };
+    var url = Uri.parse('http://localhost:8000/api/register');
+    var response = await http.post(url,
+        body: jsonEncode(<String, String>{
+          'name': name,
+          'email': email,
+          'password': password,
+          'no_hp': phone
+        }),
+        headers: requestHeaders);
+
+    if (response.statusCode == 200) {
+      return "Success";
+    } else {
+      throw Exception("Gagal mendaftar, coba lagi");
+    }
+  } catch (e) {
+    rethrow;
+  }
+}
+
 Widget inputText(TextEditingController controller, String label) {
   return Container(
     padding: const EdgeInsets.all(10),
@@ -61,11 +93,16 @@ class _RegisterState extends State<Register> {
                 padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                 child: ElevatedButton(
                   child: const Text('Register'),
-                  onPressed: () {
-                    print(emailController.text);
-                    print(passwordController.text);
-                    print(nameController.text);
-                    print(phoneController.text);
+                  onPressed: () async {
+                    String log = await register(
+                        nameController.text,
+                        emailController.text,
+                        passwordController.text,
+                        phoneController.text);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const Login()),
+                    );
                   },
                 )),
             Row(

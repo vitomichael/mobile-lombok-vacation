@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tubes/page/home/home.dart';
-import 'package:tubes/page/home/profile.dart';
-import 'package:tubes/page/home/property.dart';
-import 'package:tubes/page/unit/add_unit.dart';
 import 'package:tubes/page/user/landingPage.dart';
 
 void main() {
@@ -17,7 +13,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Lombok Vacation',
       theme: ThemeData(primarySwatch: Colors.orange),
-      home: const Home(),
+      home: const LandingPage(),
     );
   }
 }
