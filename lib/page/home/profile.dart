@@ -1,11 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:tubes/models/user_model.dart';
 import 'package:tubes/page/home/home.dart';
-import 'package:tubes/page/property/add_property.dart';
+import 'package:tubes/page/property/edit_property.dart';
 import 'package:tubes/page/user/landingPage.dart';
-import 'package:tubes/page/user/register.dart';
 
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+
+Future<UserModel> edit(String name, String email, String phone) async {
+  try {
+    final prefs = await SharedPreferences.getInstance();
+
+    final String? token = prefs.getString('token');
+    final int? userId = prefs.getInt('userId');
+
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': token ?? ''
+    };
+    var url = Uri.parse('http://localhost:8000/api/update-profile/$userId');
+    var response = await http.put(url,
+        body: jsonEncode(
+            <String, dynamic>{'name': name, 'email': email, 'no_hp': phone}),
+        headers: requestHeaders);
+
+    if (response.statusCode == 200) {
+      var body = UserModel.fromJson(jsonDecode(response.body));
+      print(body.name);
+      final prefs = await SharedPreferences.getInstance();
+
+      await prefs.setString('name', body.name);
+      await prefs.setString('email', body.email);
+      await prefs.setString('phone', body.phone);
+
+      return body;
+    } else {
+      throw Exception(response.statusCode);
+    }
+  } catch (e) {
+    rethrow;
+  }
+}
 
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
@@ -74,11 +111,11 @@ class _ProfileState extends State<Profile> {
                 margin: const EdgeInsets.fromLTRB(40, 0, 0, 40),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text("Lombok Vacation",
+                  children: const [
+                    Text("Lombok Vacation",
                         style: TextStyle(color: Colors.grey, fontSize: 14)),
-                    const SizedBox(height: 10),
-                    const Text("Edit Profile",
+                    SizedBox(height: 10),
+                    Text("Edit Profile",
                         style: TextStyle(color: Colors.black87, fontSize: 36)),
                   ],
                 ),
@@ -150,12 +187,17 @@ class _ProfileState extends State<Profile> {
                       ),
                     ],
                   ),
-                  onPressed: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //       builder: (context) => const AddProperty()),
-                    // );
+                  onPressed: () async {
+                    try {
+                      await edit(nameController.text, emailController.text,
+                          phoneController.text);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const Home()),
+                      );
+                    } catch (e) {
+                      print(e);
+                    }
                   },
                 ),
               ),

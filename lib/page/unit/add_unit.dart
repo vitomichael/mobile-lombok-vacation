@@ -93,13 +93,6 @@ class _AddUnitState extends State<AddUnit> {
             inputText(descriptionController, "Description"),
             inputText(totalController, "Total Unit"),
             inputText(priceController, "Price"),
-            ElevatedButton(
-              onPressed: () async {},
-              child: const Text(
-                'Ambil Foto',
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
             Container(
               height: 25,
               margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
