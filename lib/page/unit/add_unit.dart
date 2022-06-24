@@ -118,8 +118,8 @@ class _AddUnitState extends State<AddUnit> {
                       property.id,
                       nameController.text,
                       descriptionController.text,
-                      int.parse(priceController.text),
-                      double.parse(totalController.text),
+                      int.parse(totalController.text),
+                      double.parse(priceController.text),
                     );
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => const Home()));

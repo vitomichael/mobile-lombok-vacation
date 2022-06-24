@@ -73,8 +73,12 @@ class _UnitDetailState extends State<UnitDetail> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 10),
-                  Text(widget.unit.description,
-                      style: const TextStyle(color: Colors.grey, fontSize: 18)),
+                  Container(
+                    margin: const EdgeInsets.only(right: 40),
+                    child: Text(widget.unit.description,
+                        style:
+                            const TextStyle(color: Colors.grey, fontSize: 18)),
+                  ),
                   Text(
                     "Harga: ${widget.unit.price}",
                     style: const TextStyle(
