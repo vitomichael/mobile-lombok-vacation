@@ -23,11 +23,11 @@ class Dashboard extends StatelessWidget {
                 margin: const EdgeInsets.only(left: 60),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text("Lombok Vacation",
+                  children: const [
+                    Text("Lombok Vacation",
                         style: TextStyle(color: Colors.grey, fontSize: 18)),
-                    const SizedBox(height: 10),
-                    const Text(
+                    SizedBox(height: 10),
+                    Text(
                       "Welcome",
                       style: TextStyle(color: Colors.black87, fontSize: 45),
                     )
